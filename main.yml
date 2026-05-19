@@ -1,0 +1,38 @@
+name: Generate ASCII Artwork
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  ascii-art:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Step 1: Checkout repository
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Step 2: Install figlet tool
+      - name: Install figlet
+        run: sudo apt-get install -y figlet
+
+      # Step 3: Generate ASCII artwork
+      - name: Create ASCII artwork
+        run: |
+          mkdir -p ascii_output
+          figlet "Hello Raveendra" > ascii_output/art.txt
+          cat ascii_output/art.txt
+
+      # Step 4: Commit and push the ASCII file back to repo
+      - name: Commit ASCII artwork
+        run: |
+          git config --global user.name "ravindraff"
+          git config --global user.email "ravindra.m568@gmail.com"
+          git add ascii_output/art.txt
+          git commit -m "Add generated ASCII artwork"
+          git push
